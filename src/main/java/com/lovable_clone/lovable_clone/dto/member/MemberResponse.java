@@ -5,11 +5,10 @@ import com.lovable_clone.lovable_clone.entity.type.ProjectRole;
 import java.time.Instant;
 
 public record MemberResponse(
-        Long id,
+        Long userId,
         String email,
         String name,
-        String avatarUrl,
-        ProjectRole role,
+        ProjectRole projectRole,
         Instant invitedAt
 ) {
 }
