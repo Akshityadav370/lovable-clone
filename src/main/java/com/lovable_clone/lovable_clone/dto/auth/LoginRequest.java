@@ -1,4 +1,6 @@
 package com.lovable_clone.lovable_clone.dto.auth;
 
-public record LoginRequest(String email, String password) {
+import jakarta.validation.constraints.*;
+
+public record LoginRequest(@NotBlank @Email String email, @Size(min=4, max=50) String password) {
 }
