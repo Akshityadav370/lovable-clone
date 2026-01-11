@@ -13,6 +13,7 @@ import com.lovable_clone.lovable_clone.mapper.ProjectMapper;
 import com.lovable_clone.lovable_clone.repository.ProjectMemberRepository;
 import com.lovable_clone.lovable_clone.repository.ProjectRepository;
 import com.lovable_clone.lovable_clone.repository.UserRepository;
+import com.lovable_clone.lovable_clone.security.AuthUtil;
 import com.lovable_clone.lovable_clone.service.ProjectService;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
@@ -34,28 +35,33 @@ public class ProjectServiceImpl implements ProjectService {
     UserRepository userRepository;
     ProjectMapper projectMapper;
     ProjectMemberRepository projectMemberRepository;
+    AuthUtil authUtil;
 
     @Override
-    public List<ProjectSummaryResponse> getUserProjects(Long userId) {
+    public List<ProjectSummaryResponse> getUserProjects() {
 //        return projectRepository.findAllAccessibleByUser(userId)
 //                .stream()
 //                .map(projectMapper::toProjectSummaryResponse)
 //                .collect(Collectors.toList());
-        var projects = projectRepository.findAllAccessibleByUser(userId);
+
+        var projects = projectRepository.findAllAccessibleByUser(authUtil.getCurrentUserId());
         return projectMapper.toListOfProjectSummaryResponse(projects);
     }
 
     @Override
-    public ProjectResponse getUserProjectById(Long id, Long userId) {
-        Project project = getAccessibleProjectById(id, userId);
+    public ProjectResponse getUserProjectById(Long id) {
+        Project project = getAccessibleProjectById(id, authUtil.getCurrentUserId());
         return projectMapper.toProjectResponse(project);
     }
 
     @Override
-    public ProjectResponse createProject(ProjectRequest request, Long userId) {
-        User owner = userRepository.findById(userId).orElseThrow(
-                () -> new ResourceNotFoundException("User", userId.toString())
-        );
+    public ProjectResponse createProject(ProjectRequest request) {
+        Long userId = authUtil.getCurrentUserId();
+//        User owner = userRepository.findById(userId).orElseThrow(
+//                () -> new ResourceNotFoundException("User", userId.toString())
+//        );
+        User owner = userRepository.getReferenceById(userId); // will not make call to the DB,
+        // will create hibernate proxy object; will work only when in @Transactional Context
 
         Project project = Project.builder()
                 .name(request.name())
@@ -80,8 +86,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectResponse updateProject(Long id, ProjectRequest request, Long userId) {
-        Project project = getAccessibleProjectById(id, userId);
+    public ProjectResponse updateProject(Long id, ProjectRequest request) {
+        Project project = getAccessibleProjectById(id, authUtil.getCurrentUserId());
 
 //        if (!project.getOwner().getId().equals(userId)) {
 //            throw new RuntimeException(("You are not allowed to update"));
@@ -95,8 +101,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void softDelete(Long id, Long userId) {
-        Project project = getAccessibleProjectById(id, userId);
+    public void softDelete(Long id) {
+        Project project = getAccessibleProjectById(id, authUtil.getCurrentUserId());
 
 //        if (!project.getOwner().getId().equals(userId)) {
 //            throw new RuntimeException(("You are not allowed to delete"));
