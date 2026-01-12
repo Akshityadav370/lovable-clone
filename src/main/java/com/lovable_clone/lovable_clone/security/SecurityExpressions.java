@@ -1,8 +1,6 @@
 package com.lovable_clone.lovable_clone.security;
 
 import com.lovable_clone.lovable_clone.entity.type.ProjectPermission;
-import com.lovable_clone.lovable_clone.entity.type.ProjectRole;
-import com.lovable_clone.lovable_clone.error.ResourceNotFoundException;
 import com.lovable_clone.lovable_clone.repository.ProjectMemberRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

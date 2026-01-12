@@ -2,13 +2,16 @@ spring:
   application:
     name: lovable-clone
 
+  profiles:
+    active: local
+
   datasource:
     url: jdbc:postgresql://localhost:5432/lovable
     driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
@@ -17,3 +20,13 @@ spring:
 
 jwt:
   secret-key: 12341qevcszfarsfdq345r14fasfdasdf1234rrwasgkjlsaflkgjpoiasjfoasf
+
+stripe:
+  api:
+    secret: ${STRIPE_SECRET_KEY}
+  webhook:
+    secret: ${STRIPE_WEBHOOK_SECRET}
+
+
+client:
+  url: http://localhost:8080
