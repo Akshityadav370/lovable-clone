@@ -86,7 +86,7 @@ public class StripePaymentProcessor implements PaymentProcessor {
     }
 
     @Override
-    public PortalResponse openCustomerPortal(Long userId) {
+    public PortalResponse openCustomerPortal() {
         return null;
     }
 
