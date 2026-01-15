@@ -11,6 +11,7 @@ import com.lovable_clone.lovable_clone.entity.type.SubscriptionStatus;
 import com.lovable_clone.lovable_clone.error.ResourceNotFoundException;
 import com.lovable_clone.lovable_clone.mapper.SubscriptionMapper;
 import com.lovable_clone.lovable_clone.repository.PlanRepository;
+import com.lovable_clone.lovable_clone.repository.ProjectMemberRepository;
 import com.lovable_clone.lovable_clone.repository.SubscriptionRepository;
 import com.lovable_clone.lovable_clone.repository.UserRepository;
 import com.lovable_clone.lovable_clone.security.AuthUtil;
@@ -33,6 +34,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     private final SubscriptionMapper subscriptionMapper;
     private final UserRepository userRepository;
     private final PlanRepository planRepository;
+    private final ProjectMemberRepository projectMemberRepository;
 
     @Override
     public SubscriptionResponse getCurrentSubscription() {
@@ -137,6 +139,18 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         subscriptionRepository.save(subscription);
 
         // Notify user via email...
+    }
+
+    @Override
+    public boolean createNewProject() {
+        SubscriptionResponse currentSubscription = getCurrentSubscription();
+
+        int countOfOwnProjects = projectMemberRepository.countProjectOwnedByUser(authUtil.getCurrentUserId());
+
+        if (currentSubscription.plan() == null) {
+            return false;
+        }
+        return false;
     }
 
     // Utility
