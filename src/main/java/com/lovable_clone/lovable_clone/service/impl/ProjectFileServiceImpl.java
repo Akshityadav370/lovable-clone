@@ -2,13 +2,15 @@ package com.lovable_clone.lovable_clone.service.impl;
 
 import com.lovable_clone.lovable_clone.dto.project.FileContentResponse;
 import com.lovable_clone.lovable_clone.dto.project.FileNode;
-import com.lovable_clone.lovable_clone.service.FileService;
+import com.lovable_clone.lovable_clone.service.ProjectFileService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class FileServiceImpl implements FileService {
+@Slf4j
+public class ProjectFileServiceImpl implements ProjectFileService {
     @Override
     public List<FileNode> getFileTree(Long projectId, Long userId) {
         return List.of();
@@ -17,5 +19,10 @@ public class FileServiceImpl implements FileService {
     @Override
     public FileContentResponse getFileContent(Long projectId, String path, Long userId) {
         return null;
+    }
+
+    @Override
+    public void saveFile(Long projectId, String filePath, String fileContent) {
+        log.info("Saving file: {}", filePath);
     }
 }
