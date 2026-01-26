@@ -18,6 +18,13 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
 
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+      chat:
+        options:
+          model: openai/gpt-5.2-codex
+          temperature: 0.0
 #debug: true
 
 jwt:
@@ -32,3 +39,8 @@ stripe:
 
 client:
   url: http://localhost:8080
+
+logging:
+  level:
+    org.springframework.ai:
+      chat.client: DEBUG
