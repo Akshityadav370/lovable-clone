@@ -23,7 +23,7 @@ spring:
       api-key: ${OPENAI_API_KEY}
       chat:
         options:
-          model: openai/gpt-5.2-codex
+          model: gpt-4o-mini
           temperature: 0.0
 #debug: true
 

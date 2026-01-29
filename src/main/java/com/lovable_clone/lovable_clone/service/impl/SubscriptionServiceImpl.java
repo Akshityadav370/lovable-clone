@@ -36,6 +36,8 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     private final PlanRepository planRepository;
     private final ProjectMemberRepository projectMemberRepository;
 
+    private final Integer FREE_TIER_PROJECTS_ALLOWED = 100;
+
     @Override
     public SubscriptionResponse getCurrentSubscription() {
         Long userId = authUtil.getCurrentUserId();
@@ -142,15 +144,17 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     @Override
-    public boolean createNewProject() {
+    public boolean canCreateNewProject() {
+        Long userId = authUtil.getCurrentUserId();
         SubscriptionResponse currentSubscription = getCurrentSubscription();
 
-        int countOfOwnProjects = projectMemberRepository.countProjectOwnedByUser(authUtil.getCurrentUserId());
+        int countOfOwnedProjects = projectMemberRepository.countProjectOwnedByUser(userId);
 
-        if (currentSubscription.plan() == null) {
-            return false;
+        if(currentSubscription.plan() == null) {
+            return countOfOwnedProjects < FREE_TIER_PROJECTS_ALLOWED;
         }
-        return false;
+
+        return countOfOwnedProjects < currentSubscription.plan().maxProjects();
     }
 
     // Utility

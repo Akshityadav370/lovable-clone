@@ -18,5 +18,5 @@ public interface SubscriptionService {
 
     void markSubscriptionPastDue(String gatewaySubscriptionId);
 
-    boolean createNewProject();
+    boolean canCreateNewProject();
 }
