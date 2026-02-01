@@ -51,7 +51,9 @@ public class AiGenerationServiceImpl implements AiGenerationService {
                 .chatResponse()
                 .doOnNext(response -> {
                     String content = response.getResult().getOutput().getText();
-                    fullResponseBuffer.append(content);
+                    if (content != null) {
+                        fullResponseBuffer.append(content);
+                    }
                 })
                 .doOnComplete(() -> {
                     // method is called in different thread
@@ -60,7 +62,11 @@ public class AiGenerationServiceImpl implements AiGenerationService {
                     });
                 })
                 .doOnError(error -> log.error("Error during streaming for projectId!"))
-                .map(response -> Objects.requireNonNull(response.getResult().getOutput().getText()));
+                .map(response -> {
+                    String text = response.getResult().getOutput().getText();
+                    return text != null ? text : "";
+                })
+                .filter(text -> !text.isEmpty());
     }
 
     private void parseAndSaveFiles(String fullResponse, Long projectId) {

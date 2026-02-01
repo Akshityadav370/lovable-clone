@@ -6,7 +6,9 @@ spring:
     active: local
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/lovable
+    url: jdbc:postgresql://localhost:9010/pgvector-test
+    username: user
+    password: password
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -16,16 +18,18 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
+        format_sql: false
 
   ai:
     openai:
       api-key: ${OPENAI_API_KEY}
+#      base-url: https://openrouter.ai/api
       chat:
         options:
-          model: gpt-4o-mini
+          model: gpt-4.1-mini
           temperature: 0.0
-#debug: true
+
+debug: true
 
 jwt:
   secret-key: 12341qevcszfarsfdq345r14fasfdasdf1234rrwasgkjlsaflkgjpoiasjfoasf
@@ -44,3 +48,9 @@ logging:
   level:
     org.springframework.ai:
       chat.client: DEBUG
+
+minio:
+  url: http://localhost:9000          # or minio:9000 if inside docker network
+  access-key: minioadmin
+  secret-key: minioadmin123
+  project-bucket: projects
