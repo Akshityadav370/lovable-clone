@@ -1,6 +1,7 @@
 package com.lovable_clone.lovable_clone.service.impl;
 
 import com.lovable_clone.lovable_clone.llm.PromptUtils;
+import com.lovable_clone.lovable_clone.llm.advisors.FileTreeContextAdvisor;
 import com.lovable_clone.lovable_clone.security.AuthUtil;
 import com.lovable_clone.lovable_clone.service.AiGenerationService;
 import com.lovable_clone.lovable_clone.service.ProjectFileService;
@@ -24,6 +25,7 @@ public class AiGenerationServiceImpl implements AiGenerationService {
     private final ChatClient chatClient;
     private final AuthUtil authUtil;
     private final ProjectFileService projectFileService;
+    private final FileTreeContextAdvisor fileTreeContextAdvisor;
 
     private static final Pattern FILE_TAG_PATTERN = Pattern.compile("<file path=\"([^\"]+)\">(.*?)</file>", Pattern.DOTALL);
 
@@ -45,7 +47,7 @@ public class AiGenerationServiceImpl implements AiGenerationService {
                 .user(userPrompt)
                 .advisors(advisorSpec -> {
                     advisorSpec.params(advisorParams);
-                    // advisorSpec.advisors();
+                    advisorSpec.advisors(fileTreeContextAdvisor);
                 })
                 .stream()
                 .chatResponse()
