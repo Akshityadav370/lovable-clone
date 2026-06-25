@@ -20,6 +20,11 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: false
 
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
   ai:
     openai:
       api-key: ${OPENAI_API_KEY}
